@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HNB Finance - Smart Vehicle Search</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --hnb-navy: #002B49;
+            --hnb-gold: #D4AF37;
+            --hnb-orange: #FF6600;
+            --hnb-light-bg: #F4F6F9;
+            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--hnb-light-bg);
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border-top: 6px solid var(--hnb-gold);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--hnb-navy) 0%, #001A2C 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            color: var(--hnb-gold);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.85;
+            color: #e0e0e0;
+        }
+
+        .search-section {
+            padding: 25px;
+            background: #ffffff;
+            border-bottom: 1px solid #EAEAEA;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            font-size: 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 30px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--hnb-orange);
+            box-shadow: 0 0 8px rgba(255, 102, 0, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 18px;
+        }
+
+        .result-container {
+            padding: 25px;
+            min-height: 200px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-card {
+            background: #FAFBFD;
+            border: 1px solid #E5E9F0;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid var(--hnb-navy);
+        }
+
+        .detail-card.highlight {
+            border-left-color: var(--hnb-orange);
+            background: #FFF9F5;
+        }
+
+        .detail-card label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .detail-card .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--hnb-navy);
+        }
+
+        .detail-card.highlight .value {
+            color: var(--hnb-orange);
+        }
+
+        .matched-badge {
+            display: inline-block;
+            background: var(--hnb-gold);
+            color: #000;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .no-result {
+            text-align: center;
+            color: #777;
+            padding: 40px 10px;
+            font-size: 16px;
+        }
+
+        .table-section {
+            padding: 0 25px 25px 25px;
+            overflow-x: auto;
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--hnb-navy);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #EAEAEA;
+        }
+
+        th {
+            background-color: var(--hnb-navy);
+            color: #ffffff;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        tr:hover {
+            background-color: #F1F5F9;
+            cursor: pointer;
+        }
+
+        .footer {
+            background-color: var(--hnb-navy);
+            color: #ffffff;
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
+            border-top: 1px solid var(--hnb-gold);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 20px; }
+            th, td { padding: 8px 5px; font-size: 12px; }
+            .detail-card .value { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>HNB FINANCE</h1>
+        <p>Vehicle Leasing & Facility Rate Search</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" onkeyup="searchVehicle()" placeholder="Type Prefix (e.g. GD, AAK, HA), Full No (GD-1234), or YOM (2007)">
+        </div>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+        <div class="no-result">
+            <i class="fas fa-search" style="font-size: 30px; margin-bottom: 10px; color: #ccc;"></i><br>
+            Enter any Vehicle Prefix (e.g. <b>GD</b>, <b>GB</b>, <b>AAK</b>) or YOM to filter instantly.
+        </div>
+    </div>
+
+    <div class="table-section">
+        <div class="table-title">
+            <i class="fas fa-list-alt" style="color: var(--hnb-orange);"></i> Complete Reference Sheet
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>YOM</th>
+                    <th>Vehicle No Range</th>
+                    <th>Period</th>
+                    <th>Proposed Facility</th>
+                    <th>Max Facility</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        HNB FINANCE PLC &copy; Internal Calculator Tool
+    </div>
+</div>
+
+<script>
+    const vehicleData = [
+        { id: 1, yom: "2000-2002", range: "GA - GZ", start: "GA", end: "GZ", period: 36, facility: 320000.00, maxFacility: 410000.00, price: 683400.00 },
+        { id: 2, yom: "2003", range: "HA - HT", start: "HA", end: "HT", period: 36, facility: 420000.00, maxFacility: 460000.00, price: 767000.00 },
+        { id: 3, yom: "2004", range: "HV - HZ", start: "HV", end: "HZ", period: 36, facility: 450000.00, maxFacility: 490000.00, price: 817000.00 },
+        { id: 4, yom: "2004", range: "JA - JW", start: "JA", end: "JW", period: 48, facility: 500000.00, maxFacility: 540000.00, price: 900000.00 },
+        { id: 5, yom: "2005", range: "JW - JZ", start: "JW", end: "JZ", period: 48, facility: 525000.00, maxFacility: 560000.00, price: 933500.00 },
+        { id: 6, yom: "2005", range: "QA - QE", start: "QA", end: "QE", period: 48, facility: 600000.00, maxFacility: 650000.00, price: 1083500.00 },
+        { id: 7, yom: "2006", range: "QE - QK", start: "QE", end: "QK", period: 48, facility: 625000.00, maxFacility: 675000.00, price: 1125000.00 },
+        { id: 8, yom: "2007", range: "QK - QM 2st", start: "QK", end: "QM", stroke: "2st", period: 60, facility: 660000.00, maxFacility: 750000.00, price: 1250000.00 },
+        { id: 9, yom: "2007", range: "QK - QM 4st", start: "QK", end: "QM", stroke: "4st", period: 60, facility: 660000.00, maxFacility: 700000.00, price: 1167000.00 },
+        { id: 10, yom: "2008", range: "QM - QQ", start: "QM", end: "QQ", period: 60, facility: 700000.00, maxFacility: 750000.00, price: 1250000.00 },
+        { id: 11, yom: "2009", range: "QQ - QV (SL)", start: "QQ", end: "QV", note: "SL", period: 60, facility: 725000.00, maxFacility: 775000.00, price: 1292000.00 },
+        { id: 12, yom: "2009", range: "QR - QV (DL)", start: "QR", end: "QV", note: "DL", period: 60, facility: 750000.00, maxFacility: 825000.00, price: 1375000.00 },
+        { id: 13, yom: "2010", range: "QW - QZ", start: "QW", end: "QZ", period: 60, facility: 800000.00, maxFacility: 900000.00, price: 1500000.00 },
+        { id: 14, yom: "2010", range: "YA - YF 173CC", start: "YA", end: "YF", cc: "173CC", period: 60, facility: 900000.00, maxFacility: 950000.00, price: 1583500.00 },
+        { id: 15, yom: "2010", range: "YA - YF 200CC", start: "YA", end: "YF", cc: "200CC", period: 60, facility: 900000.00, maxFacility: 950000.00, price: 1583500.00 },
+        { id: 16, yom: "2011", range: "YF - YT", start: "YF", end: "YT", period: 60, facility: 950000.00, maxFacility: 970000.00, price: 1617000.00 },
+        { id: 17, yom: "2012", range: "YT - YZ", start: "YT", end: "YZ", period: 60, facility: 975000.00, maxFacility: 1000000.00, price: 1667000.00 },
+        { id: 18, yom: "2012", range: "AAA - AAF", start: "AAA", end: "AAF", period: 60, facility: 1000000.00, maxFacility: 1050000.00, price: 1750000.00 },
+        { id: 19, yom: "2013", range: "AAF - AAN", start: "AAF", end: "AAN", period: 60, facility: 1025000.00, maxFacility: 1075000.00, price: 1792000.00 },
+        { id: 20, yom: "2014", range: "AAN - AAV", start: "AAN", end: "AAV", period: 60, facility: 1050000.00, maxFacility: 1100000.00, price: 1833500.00 },
+        { id: 21, yom: "2015", range: "AAV - AAZ", start: "AAV", end: "AAZ", period: 60, facility: 1080000.00, maxFacility: 1130000.00, price: 1833500.00 },
+        { id: 22, yom: "2015", range: "ABA - ABH", start: "ABA", end: "ABH", period: 60, facility: 1120000.00, maxFacility: 1176000.00, price: 1960000.00 },
+        { id: 23, yom: "2016", range: "ABH - ABO", start: "ABH", end: "ABO", period: 60, facility: 1150000.00, maxFacility: 1182000.00, price: 1970000.00 },
+        { id: 24, yom: "2017", range: "ABP - ABQ", start: "ABP", end: "ABQ", period: 60, facility: 1150000.00, maxFacility: 1188000.00, price: 1980000.00 },
+        { id: 25, yom: "2018", range: "ABR - ABS", start: "ABR", end: "ABS", period: 60, facility: 1160000.00, maxFacility: 1194000.00, price: 1990000.00 },
+        { id: 26, yom: "2019", range: "ABT", start: "ABT", end: "ABT", period: 60, facility: 1170000.00, maxFacility: 1197000.00, price: 1995000.00 },
+        { id: 27, yom: "2020/2023", range: "ABU - ABV", start: "ABU", end: "ABV", period: 60, facility: 1180000.00, maxFacility: 1206000.00, price: 2010000.00 },
+        { id: 28, yom: "2025", range: "AB+", start: "AB", end: "ZZ", period: 60, facility: null, maxFacility: 1218000.00, price: 2030000.00 }
+    ];
+
+    function formatLKR(val) {
+        if (val === null || val === undefined) return "N/A";
+        return "Rs. " + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('dataTable');
+        tbody.innerHTML = '';
+        vehicleData.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.onclick = () => displayCards([item], null);
+            tr.innerHTML = `
+                <td><strong>${item.yom}</strong></td>
+                <td>${item.range}</td>
+                <td>${item.period} Months</td>
+                <td>${formatLKR(item.facility)}</td>
+                <td>${formatLKR(item.maxFacility)}</td>
+                <td>${formatLKR(item.price)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function extractPrefix(input) {
+        let clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        let letters = clean.replace(/[0-9]/g, '');
+        return letters;
+    }
+
+    function isBetween(prefix, start, end) {
+        if (!prefix) return false;
+        if (prefix.length !== start.length || prefix.length !== end.length) {
+            return false;
+        }
+        return prefix >= start && prefix <= end;
+    }
+
+    function searchVehicle() {
+        const rawInput = document.getElementById('searchInput').value.trim();
+        const container = document.getElementById('resultContainer');
+
+        if (rawInput === "") {
+            container.innerHTML = `
+                <div class="no-result">
+                    <i class="fas fa-search" style="font-size: 30px; margin-bottom: 10px; color: #ccc;"></i><br>
+                    Enter any Vehicle Prefix (e.g. <b>GD</b>, <b>GB</b>, <b>AAK</b>) or YOM to filter instantly.
+                </div>`;
+            return;
+        }
+
+        const prefix = extractPrefix(rawInput);
+
+        let matches = vehicleData.filter(item => {
+            if (item.yom.toLowerCase().includes(rawInput.toLowerCase())) return true;
+            if (item.range.toLowerCase().includes(rawInput.toLowerCase())) return true;
+            if (prefix && isBetween(prefix, item.start, item.end)) return true;
+            return false;
+        });
+
+        if (matches.length > 0) {
+            displayCards(matches, prefix);
+        } else {
+            container.innerHTML = `
+                <div class="no-result" style="color: #d9534f;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 30px; margin-bottom: 10px;"></i><br>
+                    No matching range found for "${rawInput}".
+                </div>`;
+        }
+    }
+
+    function displayCards(dataList, searchedPrefix) {
+        const container = document.getElementById('resultContainer');
+        let html = '';
+
+        dataList.forEach(data => {
+            let badge = searchedPrefix ? `<div class="matched-badge"><i class="fas fa-check-circle"></i> "${searchedPrefix}" falls in Range ${data.range}</div>` : '';
+            html += `
+                <div style="margin-bottom: 25px; background: #FFF; border: 1px solid #E1E8ED; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                    ${badge}
+                    <div style="font-size: 16px; font-weight: bold; color: var(--hnb-navy); margin-bottom: 10px;">
+                        YOM: <span style="color: var(--hnb-orange);">${data.yom}</span> | Range: ${data.range}
+                    </div>
+                    <div class="card-grid">
+                        <div class="detail-card">
+                            <label>Period</label>
+                            <div class="value">${data.period} <span style="font-size: 14px; font-weight: normal;">Months</span></div>
+                        </div>
+                        <div class="detail-card">
+                            <label>Proposed Facility Amount</label>
+                            <div class="value">${formatLKR(data.facility)}</div>
+                        </div>
+                        <div class="detail-card highlight">
+                            <label>Proposed Max Facility</label>
+                            <div class="value">${formatLKR(data.maxFacility)}</div>
+                        </div>
+                        <div class="detail-card">
+                            <label>Vehicle Price</label>
+                            <div class="value">${formatLKR(data.price)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    renderTable();
+</script>
+
+</body>
+</html>
