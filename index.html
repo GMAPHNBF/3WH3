@@ -44,6 +44,32 @@
             color: white;
             padding: 25px 20px;
             text-align: center;
+            position: relative;
+        }
+
+        /* Home Button Styles */
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--hnb-gold);
+            color: #000;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .home-btn:hover {
+            background-color: var(--hnb-orange);
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
         .header h1 {
@@ -210,6 +236,15 @@
         }
 
         @media (max-width: 600px) {
+            .header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .home-btn {
+                position: static;
+                margin-bottom: 12px;
+            }
             .header h1 { font-size: 20px; }
             th, td { padding: 8px 5px; font-size: 12px; }
             .detail-card .value { font-size: 18px; }
@@ -220,6 +255,10 @@
 
 <div class="container">
     <div class="header">
+        <!-- Home Button Added Here -->
+        <a href="https://gmaphnbf.github.io/HNBFGMAP/" class="home-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
         <h1>HNB FINANCE</h1>
         <p>Vehicle Leasing & Facility Rate Search</p>
     </div>
