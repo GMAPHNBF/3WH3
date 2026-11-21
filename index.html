@@ -6,123 +6,291 @@
     <title>HNB Finance - Smart Vehicle Search</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --hnb-navy: #002B49;
-            --hnb-gold: #D4AF37;
-            --hnb-orange: #FF6600;
-            --hnb-light-bg: #F4F6F9;
-            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        :root{
+            --hnb-blue:#1676aa; --hnb-dark:#0a5480; --hnb-green:#6fa83a;
+            --hnb-tx:#14213d; --hnb-mu:#5d6b82; --hnb-bd:#dbe6ef; --hnb-bd2:#8fa3b8;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--hnb-light-bg);
-            color: #333;
+            color: var(--hnb-tx);
             padding: 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
+            background-color: #ffffff;
+            background-image:
+                radial-gradient(560px 380px at 8% 6%, rgba(37,170,225,0.22), transparent 70%),
+                radial-gradient(600px 400px at 94% 12%, rgba(127,182,63,0.20), transparent 70%),
+                radial-gradient(700px 460px at 50% 100%, rgba(37,170,225,0.14), transparent 70%);
+            background-attachment: fixed;
         }
 
         .container {
             width: 100%;
             max-width: 950px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            border-top: 6px solid var(--hnb-gold);
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--hnb-navy) 0%, #001A2C 100%);
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
+            background: linear-gradient(150deg, rgba(255,255,255,0.86), rgba(255,255,255,0.58));
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            backdrop-filter: blur(16px) saturate(160%);
+            border: 1.5px solid rgba(255,255,255,0.95);
+            box-shadow: 0 12px 32px rgba(14,88,128,0.14), 0 2px 6px rgba(15,23,42,0.06), inset 0 1px 0 #fff;
+            border-radius: 20px;
+            overflow: visible;
             position: relative;
         }
 
-        /* Home Button Styles */
-        .home-btn {
+        /* ============ HEADER ============ */
+        .header {
+            background: linear-gradient(120deg, rgba(37,170,225,0.16), rgba(255,255,255,0.86) 50%, rgba(127,182,63,0.16));
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            backdrop-filter: blur(16px) saturate(160%);
+            color: #14213d;
+            padding: 22px 20px 20px;
+            text-align: center;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+            border-bottom: 1.5px solid rgba(255,255,255,0.95);
+            box-shadow: inset 0 1px 0 #fff;
+        }
+
+        /* ============ HNB FINANCE LOGO (with popup) ============ */
+        .hnb-logo-wrap{
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: var(--hnb-gold);
-            color: #000;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
+            top: 18px;
+            left: 18px;
+            display: inline-block;
+            z-index: 20;
+        }
+        .hnb-logo{
+            display: inline-flex; align-items: center; gap: 2px;
+            padding: 7px 16px 7px 14px;
+            border-radius: 13px;
+            background: linear-gradient(150deg, rgba(255,255,255,0.96), rgba(240,248,255,0.88));
+            border: 1.5px solid rgba(255,255,255,0.98);
+            box-shadow: 0 10px 24px rgba(14,88,128,0.18), 0 2px 5px rgba(15,23,42,0.06), inset 0 1px 0 #fff;
+            line-height: 1; position: relative; isolation: isolate; overflow: hidden;
+            cursor: pointer; user-select: none;
+            transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+        }
+        .hnb-logo:hover{
+            transform: translateY(-1px); filter: brightness(1.03);
+            box-shadow: 0 14px 30px rgba(14,88,128,0.24), 0 3px 8px rgba(15,23,42,0.10), inset 0 1px 0 #fff;
+        }
+        .hnb-logo::before{
+            content: ""; position: absolute; inset: 0 0 50% 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0));
+            pointer-events: none; z-index: -1;
+        }
+        .hnb-logo .hnb-part{
+            color: #1676aa; font-weight: 900; font-size: 1.25rem;
+            letter-spacing: -0.5px; text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+        }
+        .hnb-logo .fin-part{
+            color: #6fa83a; font-weight: 800; font-size: 0.72rem;
+            letter-spacing: 2px; margin-left: 7px; padding-left: 8px;
+            border-left: 2px solid #dbe6ef; text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        /* ============ LOGO POPUP ============ */
+        .logo-pop{
+            position: absolute; top: calc(100% + 12px); left: 0;
+            z-index: 1000; width: 310px; max-width: calc(100vw - 24px);
+            padding: 14px 14px 12px; border-radius: 22px;
+            background: linear-gradient(150deg, rgba(255,255,255,0.94), rgba(232,243,252,0.85));
+            -webkit-backdrop-filter: blur(18px) saturate(170%);
+            backdrop-filter: blur(18px) saturate(170%);
+            border: 1.5px solid rgba(255,255,255,0.98);
+            box-shadow: 0 22px 54px rgba(14,88,128,0.28), 0 4px 12px rgba(15,23,42,0.10), inset 0 1px 0 #fff;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transform: translateY(-8px) scale(0.96);
+            transform-origin: top left;
+            transition: opacity .2s ease, transform .22s cubic-bezier(.2,.9,.3,1.2), visibility 0s linear .22s;
+        }
+        .logo-pop.show{
+            opacity: 1; visibility: visible; pointer-events: auto;
+            transform: translateY(0) scale(1);
+            transition: opacity .2s ease, transform .22s cubic-bezier(.2,.9,.3,1.2), visibility 0s;
+        }
+        .logo-pop::before{
+            content: ""; position: absolute; top: -7px; left: 22px;
+            width: 14px; height: 14px;
+            background: rgba(255,255,255,0.96);
+            border-left: 1.5px solid rgba(255,255,255,0.98);
+            border-top: 1.5px solid rgba(255,255,255,0.98);
+            transform: rotate(45deg); border-radius: 3px 0 0 0;
+        }
+        .lp-head{
+            text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 2px;
+            color: #1676aa; text-transform: uppercase; margin: 0 0 10px 0;
+        }
+        .lp-head span{ color: #6fa83a; }
+        .lp-opt{
+            position: relative; isolation: isolate; overflow: hidden;
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 14px; border-radius: 16px; text-decoration: none; color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+            border: 1.5px solid rgba(255,255,255,0.62);
+            box-shadow: 0 8px 20px rgba(14,88,128,0.28), inset 0 1.5px 0 rgba(255,255,255,0.75), inset 0 -10px 16px rgba(255,255,255,0.08);
+            transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+            cursor: pointer;
+        }
+        .lp-opt + .lp-opt{ margin-top: 10px; }
+        .lp-opt::before{
+            content: ""; position: absolute; left: 0; right: 0; top: 0; height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.03));
+            border-radius: inherit; border-bottom-left-radius: 60% 28%; border-bottom-right-radius: 60% 28%;
+            pointer-events: none; z-index: -1;
+        }
+        .lp-web{
+            background:
+                linear-gradient(150deg,rgba(255,255,255,0.24),rgba(255,255,255,0) 60%),
+                linear-gradient(160deg,rgba(22,118,170,0.96),rgba(10,84,128,0.92));
+        }
+        .lp-call{
+            background:
+                linear-gradient(150deg,rgba(255,255,255,0.26),rgba(255,255,255,0) 60%),
+                linear-gradient(160deg,rgba(122,184,62,0.97),rgba(70,128,36,0.94));
+            box-shadow: 0 8px 20px rgba(70,128,36,0.32), inset 0 1.5px 0 rgba(255,255,255,0.75), inset 0 -10px 16px rgba(255,255,255,0.08);
+        }
+        .lp-opt:hover{ transform: translateY(-2px); filter: brightness(1.08) saturate(1.1); }
+        .lp-opt:active{ transform: translateY(0); filter: brightness(0.97); }
+        .lp-ico{
+            position: relative; flex: 0 0 42px; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center; font-size: 22px;
+            border-radius: 13px; background: rgba(255,255,255,0.24);
+            border: 1px solid rgba(255,255,255,0.55);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+        }
+        .lp-call .lp-ico::after{
+            content: ""; position: absolute; inset: -2px; border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.7);
+            animation: lpRing 1.6s ease-in-out infinite;
+        }
+        @keyframes lpRing{ 0%{transform:scale(1);opacity:.9} 100%{transform:scale(1.45);opacity:0} }
+        .lp-call .lp-ico span{
+            display: inline-block; animation: lpWiggle 2.2s ease-in-out infinite;
+            transform-origin: 50% 60%;
+        }
+        @keyframes lpWiggle{
+            0%,70%,100%{transform:rotate(0)} 75%{transform:rotate(-14deg)}
+            80%{transform:rotate(12deg)} 85%{transform:rotate(-10deg)} 90%{transform:rotate(8deg)}
+        }
+        .lp-txt{ display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+        .lp-lbl{ font-size: 10px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; opacity: .92; }
+        .lp-main{ font-size: 16px; font-weight: 800; letter-spacing: .3px; margin-top: 3px; white-space: nowrap; }
+        .lp-go{ margin-left: auto; font-size: 22px; font-weight: 800; opacity: .9; transition: transform .18s ease; }
+        .lp-opt:hover .lp-go{ transform: translateX(3px); }
+
+        /* ============ TITLE ============ */
+        .header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin: 8px 0 5px;
+            background: linear-gradient(90deg, #1676aa, #6fa83a, #1676aa);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer{ to{ background-position: 200% center; } }
+        .header p {
             font-size: 14px;
+            color: #5d6b82;
+        }
+
+        /* ============ HOME BUTTON (BLUE GLASS) ============ */
+        .home-btn{
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            isolation: isolate;
+            overflow: hidden;
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            color: #fff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+            background:
+                linear-gradient(150deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 42%, rgba(255,255,255,0) 100%),
+                linear-gradient(160deg, rgba(22,118,170,0.95), rgba(10,84,128,0.90));
+            -webkit-backdrop-filter: blur(14px) saturate(170%);
+            backdrop-filter: blur(14px) saturate(170%);
+            border: 1.5px solid rgba(255,255,255,0.62);
+            box-shadow:
+                0 8px 20px rgba(14,88,128,0.28),
+                0 2px 5px rgba(15,23,42,0.16),
+                inset 0 1.5px 0 rgba(255,255,255,0.75),
+                inset 0 -10px 16px rgba(255,255,255,0.08);
+            transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+            z-index: 20;
         }
-
-        .home-btn:hover {
-            background-color: var(--hnb-orange);
-            color: #ffffff;
+        .home-btn::before{
+            content: ""; position: absolute; left: 0; right: 0; top: 0; height: 52%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.03));
+            border-radius: inherit; border-bottom-left-radius: 60% 28%; border-bottom-right-radius: 60% 28%;
+            pointer-events: none; z-index: -1;
+        }
+        .home-btn:hover{
+            filter: brightness(1.08) saturate(1.1);
             transform: translateY(-2px);
+            box-shadow:
+                0 14px 30px rgba(14,88,128,0.36), 0 3px 8px rgba(15,23,42,0.18),
+                inset 0 1.5px 0 rgba(255,255,255,0.85), inset 0 -10px 16px rgba(255,255,255,0.10);
         }
 
-        .header h1 {
-            font-size: 24px;
-            letter-spacing: 0.5px;
-            color: var(--hnb-gold);
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.85;
-            color: #e0e0e0;
-        }
-
+        /* ============ SEARCH ============ */
         .search-section {
-            padding: 25px;
-            background: #ffffff;
-            border-bottom: 1px solid #EAEAEA;
+            padding: 24px 25px;
+            border-bottom: 1px solid rgba(219,230,239,0.6);
         }
-
         .search-box {
             position: relative;
             max-width: 550px;
             margin: 0 auto;
         }
-
         .search-box input {
             width: 100%;
             padding: 14px 20px 14px 45px;
-            font-size: 16px;
-            border: 2px solid #E0E0E0;
+            font-size: 15px;
             border-radius: 30px;
             outline: none;
+            color: #14213d;
+            background: linear-gradient(150deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+            border: 1.5px solid rgba(143,163,184,0.5);
+            box-shadow: 0 3px 10px rgba(14,88,128,0.10), inset 0 1px 3px rgba(14,88,128,0.08);
             transition: all 0.3s ease;
+            font-weight: 500;
         }
-
+        .search-box input::placeholder{ color: #8fa3b8; }
         .search-box input:focus {
-            border-color: var(--hnb-orange);
-            box-shadow: 0 0 8px rgba(255, 102, 0, 0.2);
+            border-color: #1676aa;
+            box-shadow: 0 0 0 4px rgba(22,118,170,0.20), 0 3px 10px rgba(14,88,128,0.12);
         }
-
         .search-box i {
             position: absolute;
             left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #888;
-            font-size: 18px;
+            color: #1676aa;
+            font-size: 17px;
         }
 
+        /* ============ RESULTS ============ */
         .result-container {
-            padding: 25px;
+            padding: 24px 25px;
             min-height: 200px;
         }
 
@@ -130,80 +298,129 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 12px;
+        }
+
+        .result-item {
+            margin-bottom: 22px;
+            padding: 18px;
+            border-radius: 14px;
+            background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.74));
+            border: 1.5px solid rgba(255,255,255,0.95);
+            box-shadow: 0 6px 18px rgba(14,88,128,0.12), inset 0 1px 0 #fff;
         }
 
         .detail-card {
-            background: #FAFBFD;
-            border: 1px solid #E5E9F0;
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 4px solid var(--hnb-navy);
+            background: linear-gradient(150deg, rgba(255,255,255,0.94), rgba(246,251,255,0.78));
+            border: 1.5px solid rgba(143,163,184,0.45);
+            border-radius: 12px;
+            padding: 14px;
+            border-left: 4px solid #1676aa;
+            box-shadow: 0 4px 12px rgba(14,88,128,0.08), inset 0 1px 0 #fff;
         }
 
         .detail-card.highlight {
-            border-left-color: var(--hnb-orange);
-            background: #FFF9F5;
+            border-left-color: #6fa83a;
+            background: linear-gradient(150deg, rgba(255,255,255,0.94), rgba(240,250,235,0.78));
         }
 
         .detail-card label {
-            font-size: 12px;
-            color: #666;
+            font-size: 11.5px;
+            color: #5d6b82;
             text-transform: uppercase;
             display: block;
             margin-bottom: 4px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .detail-card .value {
             font-size: 20px;
-            font-weight: bold;
-            color: var(--hnb-navy);
+            font-weight: 800;
+            color: #14213d;
+            font-variant-numeric: tabular-nums;
         }
-
         .detail-card.highlight .value {
-            color: var(--hnb-orange);
+            color: #2e9e6b;
         }
 
         .matched-badge {
             display: inline-block;
-            background: var(--hnb-gold);
-            color: #000;
-            font-weight: bold;
-            padding: 4px 10px;
+            color: #fff;
+            font-weight: 700;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12.5px;
+            margin-bottom: 10px;
+            isolation: isolate;
+            overflow: hidden;
+            position: relative;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+            background:
+                linear-gradient(150deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 42%, rgba(255,255,255,0) 100%),
+                linear-gradient(160deg, rgba(22,118,170,0.95), rgba(10,84,128,0.90));
+            border: 1.5px solid rgba(255,255,255,0.62);
+            box-shadow: 0 6px 14px rgba(14,88,128,0.26), inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .result-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #14213d;
             margin-bottom: 10px;
         }
+        .result-title span{ color: #1676aa; }
 
         .no-result {
             text-align: center;
-            color: #777;
+            color: #5d6b82;
             padding: 40px 10px;
-            font-size: 16px;
+            font-size: 15px;
         }
+        .no-result b{ color: #1676aa; }
 
+        /* ============ FOOTER ============ */
         .footer {
-            background-color: var(--hnb-navy);
+            background: linear-gradient(150deg, rgba(22,118,170,0.95), rgba(10,84,128,0.92));
             color: #ffffff;
             text-align: center;
-            padding: 12px;
+            padding: 14px;
             font-size: 12px;
-            border-top: 1px solid var(--hnb-gold);
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            border-radius: 0 0 20px 20px;
+            border-top: 1.5px solid rgba(255,255,255,0.30);
+            box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.20);
         }
+        .footer b{ color: #a4d060; font-weight: 800; }
 
+        /* ============ RESPONSIVE ============ */
         @media (max-width: 600px) {
+            body{ padding: 12px; }
             .header {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                padding-top: 70px;
             }
-            .home-btn {
-                position: static;
-                margin-bottom: 12px;
+            .hnb-logo-wrap{
+                top: 14px; left: 14px;
             }
-            .header h1 { font-size: 20px; }
+            .hnb-logo{ padding: 6px 12px 6px 10px; }
+            .hnb-logo .hnb-part{ font-size: 1.05rem; }
+            .hnb-logo .fin-part{ font-size: .62rem; letter-spacing: 1.6px; margin-left: 5px; padding-left: 6px; }
+            .home-btn{
+                top: 14px; right: 14px;
+                padding: 7px 12px; font-size: 12px;
+            }
+            .header h1 { font-size: 20px; margin-top: 5px; }
+            .header p{ font-size: 13px; }
+            .search-section { padding: 18px 16px; }
+            .result-container { padding: 18px 16px; }
             .detail-card .value { font-size: 18px; }
+            .logo-pop{ width: 280px; padding: 12px; border-radius: 18px; }
+            .lp-main{ font-size: 15px; }
+            .lp-ico{ flex: 0 0 38px; width: 38px; height: 38px; font-size: 20px; }
         }
     </style>
 </head>
@@ -211,10 +428,42 @@
 
 <div class="container">
     <div class="header">
-        <!-- Home Button Added Here -->
+
+        <!-- HNB Logo (with popup) -->
+        <div class="hnb-logo-wrap" id="logoWrap">
+            <div class="hnb-logo" id="logoBtn" title="Click for website &amp; hotline">
+                <span class="hnb-part">HNB</span>
+                <span class="fin-part">FINANCE</span>
+            </div>
+
+            <div class="logo-pop" id="logoPop" role="dialog" aria-label="HNB Finance quick links">
+                <div class="lp-head">HNB <span>FINANCE</span></div>
+
+                <a class="lp-opt lp-web" href="https://www.hnbfinance.lk/" target="_blank" rel="noopener noreferrer">
+                    <div class="lp-ico">🌐</div>
+                    <div class="lp-txt">
+                        <span class="lp-lbl">Website</span>
+                        <span class="lp-main">www.hnbfinance.lk</span>
+                    </div>
+                    <span class="lp-go">→</span>
+                </a>
+
+                <a class="lp-opt lp-call" href="tel:+94114700700">
+                    <div class="lp-ico"><span>📞</span></div>
+                    <div class="lp-txt">
+                        <span class="lp-lbl">Hotline</span>
+                        <span class="lp-main">+94 11 4 700 700</span>
+                    </div>
+                    <span class="lp-go">→</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Home button -->
         <a href="https://gmaphnbf.github.io/HNBFGMAP/" class="home-btn">
             <i class="fas fa-home"></i> Home
         </a>
+
         <h1>HNB FINANCE</h1>
         <p>Vehicle Leasing & Facility Rate Search</p>
     </div>
@@ -228,28 +477,17 @@
 
     <div class="result-container" id="resultContainer">
         <div class="no-result">
-            <i class="fas fa-search" style="font-size: 30px; margin-bottom: 10px; color: #ccc;"></i><br>
+            <i class="fas fa-search" style="font-size: 30px; margin-bottom: 10px; color: #8fa3b8;"></i><br>
             Enter any Vehicle Prefix (e.g. <b>GD</b>, <b>GB</b>, <b>AAK</b>) or YOM to filter instantly.
         </div>
     </div>
 
     <div class="footer">
-        HNB FINANCE PLC &copy; Internal Calculator Tool
+        HNB FINANCE PLC &copy; <b>Internal Calculator Tool</b>
     </div>
 </div>
 
 <script>
-    // CORRECTED FIREBASE CONFIGURATION
-    const firebaseConfig = {
-        apiKey: "AIzaSyDKkMovF3OWweyQSveA8KUKk63b-i5cqUg",
-        authDomain: "gmap-e4d9c.firebaseapp.com",
-        databaseURL: "https://gmap-e4d9c-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "gmap-e4d9c",
-        storageBucket: "gmap-e4d9c.firebasestorage.app",
-        messagingSenderId: "463028372030",
-        appId: "1:463028372030:web:76de01a61aba1cf4f4c76f",
-        measurementId: "G-PCH9WKCTLD"
-    };
     const vehicleData = [
         { id: 1, yom: "2000-2002", range: "GA - GZ", start: "GA", end: "GZ", period: 36, facility: 320000.00, maxFacility: 410000.00, price: 683400.00 },
         { id: 2, yom: "2003", range: "HA - HT", start: "HA", end: "HT", period: 36, facility: 420000.00, maxFacility: 460000.00, price: 767000.00 },
@@ -281,6 +519,28 @@
         { id: 28, yom: "2025", range: "AB+", start: "AB", end: "ZZ", period: 60, facility: null, maxFacility: 1218000.00, price: 2030000.00 }
     ];
 
+    /* ==================== LOGO POPUP ==================== */
+    (function(){
+        const wrap = document.getElementById('logoWrap');
+        const btn  = document.getElementById('logoBtn');
+        const pop  = document.getElementById('logoPop');
+        if(!wrap || !btn || !pop) return;
+        let hideTimer = null;
+        function show(){ clearTimeout(hideTimer); pop.classList.add('show'); }
+        function hide(){ hideTimer = setTimeout(function(){ pop.classList.remove('show'); }, 220); }
+        wrap.addEventListener('mouseenter', show);
+        wrap.addEventListener('mouseleave', hide);
+        btn.addEventListener('click', function(e){ e.stopPropagation(); pop.classList.toggle('show'); });
+        pop.addEventListener('click', function(e){ e.stopPropagation(); });
+        document.addEventListener('click', function(e){
+            if (!wrap.contains(e.target)) pop.classList.remove('show');
+        });
+        document.addEventListener('keydown', function(e){
+            if (e.key === 'Escape') pop.classList.remove('show');
+        });
+    })();
+
+    /* ==================== SEARCH LOGIC ==================== */
     function formatLKR(val) {
         if (val === null || val === undefined) return "N/A";
         return "Rs. " + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -307,7 +567,7 @@
         if (rawInput === "") {
             container.innerHTML = `
                 <div class="no-result">
-                    <i class="fas fa-search" style="font-size: 30px; margin-bottom: 10px; color: #ccc;"></i><br>
+                    <i class="fas fa-search" style="font-size: 30px; margin-bottom: 10px; color: #8fa3b8;"></i><br>
                     Enter any Vehicle Prefix (e.g. <b>GD</b>, <b>GB</b>, <b>AAK</b>) or YOM to filter instantly.
                 </div>`;
             return;
@@ -326,9 +586,9 @@
             displayCards(matches, prefix);
         } else {
             container.innerHTML = `
-                <div class="no-result" style="color: #d9534f;">
+                <div class="no-result" style="color: #d6453d;">
                     <i class="fas fa-exclamation-circle" style="font-size: 30px; margin-bottom: 10px;"></i><br>
-                    No matching range found for "${rawInput}".
+                    No matching range found for "<b>${rawInput}</b>".
                 </div>`;
         }
     }
@@ -338,17 +598,19 @@
         let html = '';
 
         dataList.forEach(data => {
-            let badge = searchedPrefix ? `<div class="matched-badge"><i class="fas fa-check-circle"></i> "${searchedPrefix}" falls in Range ${data.range}</div>` : '';
+            let badge = searchedPrefix
+                ? `<div class="matched-badge"><i class="fas fa-check-circle"></i> "${searchedPrefix}" falls in Range ${data.range}</div>`
+                : '';
             html += `
-                <div style="margin-bottom: 25px; background: #FFF; border: 1px solid #E1E8ED; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                <div class="result-item">
                     ${badge}
-                    <div style="font-size: 16px; font-weight: bold; color: var(--hnb-navy); margin-bottom: 10px;">
-                        YOM: <span style="color: var(--hnb-orange);">${data.yom}</span> | Range: ${data.range}
+                    <div class="result-title">
+                        YOM: <span>${data.yom}</span> | Range: ${data.range}
                     </div>
                     <div class="card-grid">
                         <div class="detail-card">
                             <label>Period</label>
-                            <div class="value">${data.period} <span style="font-size: 14px; font-weight: normal;">Months</span></div>
+                            <div class="value">${data.period} <span style="font-size: 13px; font-weight: 600; color:#5d6b82;">Months</span></div>
                         </div>
                         <div class="detail-card">
                             <label>Proposed Facility Amount</label>
